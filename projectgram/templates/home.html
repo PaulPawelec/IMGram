@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<ul>
+    {% if user.is_authenticated %}
+        {% for post in posts %}
+        <center>
+            <div class="card mb-1" style="max-width: 600px;">
+                <div align="left" style="margin-left:25px;">
+                    <br>
+                    {% if post.author.profile.avatar %}
+                        <img src="{{ post.author.profile.avatar.url }}" width=50 height=50 class="rounded">
+                    {% else %}
+                        <img src="{% static 'testgram/images/default.jpg' %}" width=50 height=50 class="rounded">
+                    {% endif %}
+                    <a href="{% url 'profile_details' post.author.profile.id %}">
+                        {{ post.author.first_name }} {{ post.author.last_name }}
+                    </a>
+                </div>
+                <hr>
+                <div>
+                    <a href="{% url 'post_details' post.pk %}"><img src="{{ post.image_post.url }}" width=500px height=500px></a>
+                    <hr>
+<!--                    <a href="{% url 'post_update' post.pk %}">Update</a>-->
+<!--                    <a href="{% url 'post_delete' post.pk %}">Delete</a>-->
+
+<!--                    <br/>-->
+<!--                    {{ post.description|slice:":100"|safe }}-->
+                </div>
+            </div>
+        </center>
+        {% endfor %}
+    {% else %}
+        {% for post in posts %}
+        <center>
+            <div class="card mb-1" style="max-width: 600px;">
+                <div align="left" style="margin-left:25px;">
+                    <br>
+                    {% if post.author.profile.avatar %}
+                        <img src="{{ post.author.profile.avatar.url }}" width=50 height=50 class="rounded">
+                    {% else %}
+                        <img src="{% static 'testgram/images/default.jpg' %}" width=50 height=50 class="rounded">
+                    {% endif %}
+                    <a href="{% url 'profile_details' post.author.profile.id %}">
+                        {{ post.author.first_name }} {{ post.author.last_name }}
+                    </a>
+                </div>
+                <hr>
+                <div>
+                    <a href="{% url 'post_details' post.pk %}"><img src="{{ post.image_post.url }}" width=500px height=500px></a>
+                    <hr>
+                </div>
+            </div>
+        </center>
+<!--            <li><a href="{% url 'post_details' post.pk %}"><img src="{{ post.image_post.url }}" width=200px height=300px></a>-->
+<!--                - {{ post.author.first_name }} {{ post.author.last_name }}-->
+<!--                - <a href="{% url 'post_update' post.pk %}">Update</a>-->
+<!--                <a href="{% url 'post_delete' post.pk %}">Delete</a>-->
+
+<!--                <br/>-->
+<!--                {{ post.description|slice:":100"|safe }}-->
+<!--            </li>-->
+        {% endfor %}
+    {% endif %}
+</ul>
+
+{% endblock %}

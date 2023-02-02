@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<center>
+    <div>
+        {% if user.id == user_page.user.id %}
+        {% else %}
+            <form action="{% url 'profile_followers' profile.pk %}" method="post">
+            {% csrf_token %}
+
+            {% if user.is_authenticated %}
+                {% if followed %}
+                    <button class="btn btn-danger" type="submit" name="profile_id" value="{{ profile.id }}">
+                        Unfollow it!
+                    </button>
+                {% else %}
+                    <button class="btn btn-warning" type="submit" name="profile_id" value="{{ profile.id }}">
+                        Follow it!
+                    </button>
+                {% endif %}
+            {% else %}
+                You are not logged!
+            {% endif %}
+            </form>
+        {% endif %}
+    </div>
+    <div class="card" style="max-width: 900px;">
+      <div class="row" align="left">
+        <div class="col" style="max-width:210px;">
+            {% if user_page.avatar %}
+                <img src="{{ user_page.avatar.url }}" width=200 height=200 class="rounded">
+            {% else %}
+                <img src="{% static 'testgram/images/default.jpg' %}" width=200 height=200 class="rounded">
+            {% endif %}
+        </div>
+        <div class="col">
+          <div class="card-body">
+              <h1 class="card-title">{{ user_page.user.username }}
+                {% if user.id == user_page.user.id %}
+                    <a href="{% url 'profile_edit' user_page.user.profile.id %}" style="font-size: 10px">Edit profile</a>
+                {% else %}
+                {% endif %}</h1>
+              <h5>{{ user_page.user.first_name }} {{ user_page.user.last_name }}</h5>
+              {{ followers_count }} Followers       {{ follows_count }} Follows
+              <p class="card-text">{{ user_page.biography }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="max-width: 900px;" >
+        <h2>Posts:</h2>
+        {% for post in posts %}
+            <div class="container">
+                <div class="row">
+                    <div class="col" align="right">
+                        <a href="{% url 'post_details' post.pk %}"><img src="{{ post.image_post.url }}" width=300px height=300px></a>
+                    </div>
+                    <div class="col" align="left">
+                        {% if user.id == user_page.user.id %}
+                            <a href="{% url 'post_delete' post.pk %}">Delete</a>
+                        {% else %}
+
+                        {% endif %}
+
+                        <br>
+                        Description:
+                        <br>
+                        {{ post.description }}
+                        <br>
+                        {% if user.id == user_page.user.id %}
+                            <small><a href="{% url 'post_update' post.pk %}">Edit description</a></small>
+                        {% else %}
+
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <br/>
+        {% empty %}
+            No posts here
+        {% endfor %}
+    </div>
+</center>
+
+{% endblock %}

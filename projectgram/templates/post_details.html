@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <div class="card mb-1">
+      <div class="row">
+        <div class="col" align="center">
+            {% if post.image_post %}
+                <img src="{{ post.image_post.url }}">
+            {% else %}
+            {% endif %}
+            <br>
+
+            {% if user.id == post.author.id %}
+                <a href="{% url 'post_update' post.pk %}">Update</a>
+                <a href="{% url 'post_delete' post.pk %}">Delete</a>
+            {% else %}
+
+            {% endif %}
+
+            <br>
+            <br>
+            <br>
+        </div>
+        <div class="col" style="margin-left:25px; margin-top:5px;">
+            <div>
+                {% if post.author.profile.avatar %}
+                    <img src="{{ post.author.profile.avatar.url }}" width=50 height=50 class="rounded">
+                {% else %}
+                    <img src="{% static 'testgram/images/default.jpg' %}" width=50 height=50 class="rounded">
+                {% endif %}
+                <a href="{% url 'profile_details' post.author.profile.id %}">
+                    {{ post.author.first_name }}
+                    {{ post.author.last_name }}
+                </a>
+            </div>
+            <hr>
+            {{ post.description }}
+            <hr>
+            <form action="{% url 'post_like' post.pk %}" method="post">
+                {% csrf_token %}
+
+                {% if user.is_authenticated %}
+                    {% if liked %}
+                        <button class="btn btn-danger" type="submit" name="post_id" value="{{ post.id }}">
+                            Unlike it!
+                        </button>
+                    {% else %}
+                        <button class="btn btn-primary" type="submit" name="post_id" value="{{ post.id }}">
+                            Like it!
+                        </button>
+                    {% endif %}
+                {% else %}
+                    You are not logged!
+                {% endif %}
+                            {{ likes_count }} Likes
+            </form>
+            <hr>
+            <h4>Comments: </h4>
+            <div class="ex1">
+                {% if not comments %}
+                    No comments
+                {% else %}
+<!--                post.comments.all-->
+                    {% for comment in comments %}
+                        <div>
+                            {% if comment.author.profile.avatar %}
+                                <img src="{{ comment.author.profile.avatar.url }}" width=50 height=50 class="rounded">
+                            {% else %}
+                                <img src="{% static 'testgram/images/default.jpg' %}" width=50 height=50 class="rounded">
+                            {% endif %}
+                            <a href="{% url 'profile_details' comment.author.profile.id %}">
+                                {{ comment.author.first_name }} {{ comment.author.last_name }}
+                            </a>
+                            {{ comment.date_add }}
+                            <br/>
+                              {{ comment.text }}
+                            <br/>
+                            {% if user.id == user_page.user.id or comment.author.id %}
+<!--                                <a href="{% url 'post_update' post.pk %}">Update</a>-->
+                                <a href="{% url 'comment_delete' comment.pk %}">Delete</a>
+                            {% else %}
+                            {% endif %}
+                        </div>
+                        <br/>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <br/>
+            <div class="basic">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                {{ comment_form }}
+                            </div>
+                            <div class="col">
+                                <br>
+                                <button class="btn btn-dark btn-lg" type="submit">Add comment</button>
+                            </div>
+                        </div>
+                    </div>
+                  </form>
+            </div>
+<!--            <a href="{% url 'comment_add' post.pk %}">Add Comment</a>-->
+        </div>
+      </div>
+    </div>
+
+<br>
+
+<!--    <br><br/>-->
+<!--    <h1>Comments: </h1>-->
+<!--    {% if not post.comments.all %}-->
+<!--        No comments-->
+<!--    {% else %}-->
+<!--        {% for comment in post.comments.all %}-->
+<!--            {{ comment.author.username }} -&#45;&#45; {{ comment.date_add }}-->
+<!--            <br/>-->
+<!--            {{ comment.text }}-->
+<!--            <br/>-->
+<!--        {% endfor %}-->
+<!--    {% endif %}-->
+
+<!--    <br/>-->
+<!--    <a href="{% url 'comment_add' post.pk %}">Add Comment</a>-->
+{% endblock %}

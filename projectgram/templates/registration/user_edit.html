@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %} Edit account {% endblock %}
+{% block content %}
+
+<h1>Edit account</h1>
+<br/><br/>
+
+<div class="form-group">
+    <form class="form" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Edit</button>
+    </form>
+</div>
+
+{% endblock %}

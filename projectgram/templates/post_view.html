@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<!--<div class="container">-->
+<!--    <div class="row">-->
+<!--        {% if post.image_post %}-->
+<!--            <img src="{{ post.image_post.url }}">-->
+<!--        {% else %}-->
+<!--        {% endif %}-->
+<!--    </div>-->
+<!--</div>-->
+
+{% for post in posts %}
+        <center>
+            <div class="card mb-1" style="max-width: 600px;">
+                <div align="left" style="margin-left:25px;">
+                    <br>
+                    {% if post.author.profile.avatar %}
+                        <img src="{{ post.author.profile.avatar.url }}" width=50 height=50 class="rounded">
+                    {% else %}
+                        <img src="{% static 'testgram/images/default.jpg' %}" width=50 height=50 class="rounded">
+                    {% endif %}
+                    <a href="{% url 'profile_details' post.author.profile.id %}">
+                        {{ post.author.first_name }} {{ post.author.last_name }}
+                    </a>
+                </div>
+                <hr>
+                <div>
+                    <a href="{% url 'post_details' post.pk %}"><img src="{{ post.image_post.url }}" width=500px height=500px></a>
+                    <hr>
+                </div>
+            </div>
+        </center>
+{% endfor %}
+
+{% endblock %}

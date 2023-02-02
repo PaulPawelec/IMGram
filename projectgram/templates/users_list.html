@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+{% for profile in profiles %}
+        <center>
+            <div class="card mb-1" style="max-width: 600px;">
+                <div align="left" style="margin-left:25px;">
+                    <br>
+                    {% if profile.avatar %}
+                        <img src="{{ profile.avatar.url }}" width=50 height=50 class="rounded">
+                    {% else %}
+                        <img src="{% static 'testgram/images/default.jpg' %}" width=50 height=50 class="rounded">
+                    {% endif %}
+                    <a href="{% url 'profile_details' profile.id %}">
+                        {{ profile.user }}
+                    </a>
+                </div>
+                <br>
+            </div>
+        </center>
+{% empty %}
+   add something to show no results
+{% endfor %}
+
+{% endblock %}
